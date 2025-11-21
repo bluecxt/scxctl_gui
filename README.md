@@ -1,4 +1,10 @@
-# 🎮 scxctl_gui
+<p align="center">
+  <img src="scxctl_gui.png" alt="icon" width="80" style="vertical-align: middle;">
+</p>
+
+<h1 align="center">
+  scxctl gui
+</h1>
 
 > A minimal, modern GUI for **scxctl** to manage your sched_ext schedulers with ease. Available in **Qt6** (KDE) and **GTK4** (GNOME) flavors.
 
