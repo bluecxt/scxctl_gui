@@ -3,8 +3,8 @@ name: Build & Release AppImage
 on:
   push:
     tags:
-      - "v*.*.*"   # Se lance uniquement sur push de tags versionnés
-  workflow_dispatch:  # Permet de lancer manuellement
+      - "v*.*.*" # Se lance uniquement sur push de tags versionnés
+  workflow_dispatch: # Permet de lancer manuellement
 
 jobs:
   build:
@@ -19,35 +19,41 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install PyInstaller
+      - name: Install Dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-gi python3-gi-cairo gir1.2-gtk-4.0 libcairo2-dev libgirepository1.0-dev
           python -m pip install --upgrade pip
-          pip install pyinstaller PyQt6
+          pip install pyinstaller PyQt6 pygobject
 
       - name: Make build script executable
         run: chmod +x build.sh
 
-      - name: Run build script
+      - name: Run build script (Build Both)
+        env:
+          ARCH: x86_64
+          APPIMAGE_EXTRACT_AND_RUN: 1
         run: ./build.sh
 
-      - name: Upload AppImage artifact
+      - name: Upload AppImage artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: scxctl_gui
+          name: scxctl_gui_appimages
           path: ./*.AppImage
 
   release:
     needs: build
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
 
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: scxctl_gui
+          name: scxctl_gui_appimages
           path: ./release
 
-      - name: Create GitHub Release and upload AppImage
+      - name: Create GitHub Release and upload AppImages
         uses: softprops/action-gh-release@v2
         with:
           files: ./release/*.AppImage

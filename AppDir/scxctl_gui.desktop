@@ -1,17 +1,6 @@
 [Desktop Entry]
-Categories=System;Utility;
-Comment[fr_FR]=Interface graphique pour scxctl
-Comment=Graphical interface for scxctl
-Exec=AppRun
-GenericName=
-Icon=scxctl_gui.png
-MimeType=
 Name=SCXCTL GUI
-Path=
-PrefersNonDefaultGPU=false
-StartupNotify=true
-Terminal=false
-TerminalOptions=
+Exec=scxctl_gui
+Icon=scxctl_gui
 Type=Application
-X-KDE-SubstituteUID=false
-X-KDE-Username=
+Categories=Utility;
