@@ -85,6 +85,30 @@
    python3 scxctl_gui_gtk.py
    ```
 
+## ⚡ Advanced: Passwordless Execution (Polkit)
+
+By default, modifying kernel schedulers via the GUI may trigger a Polkit authentication prompt. To eliminate this and allow seamless transitions, you can create a specific privilege exemption rule for your user.
+
+1. **Create a custom Polkit rule:**
+   Open a terminal and create a new rules file with administrator privileges:
+   ```bash
+   sudo nano /etc/polkit-1/rules.d/99-scxctl-nopasswd.rules
+   ```
+
+2. **Add the following configuration:**
+   *(Note: Replace `YOUR_USERNAME` with your actual Linux user account name.)*
+   ```javascript
+   polkit.addRule(function(action, subject) {
+       if (action.id == "org.scx.loader.manage-schedulers" && 
+           subject.user == "YOUR_USERNAME") {
+           return polkit.Result.YES;
+       }
+   });
+   ```
+
+3. **Apply the changes:**
+   Save the file. The Polkit daemon actively monitors this directory and applies the new policy immediately. Subsequent scheduler modifications will execute without the password prompt.
+
 ## 🏗️ Building from Source
 
 To build the AppImages yourself, you can use the provided build script.
@@ -105,9 +129,6 @@ To build the AppImages yourself, you can use the provided build script.
 
 3. The output AppImages will be generated in the current directory.
 
-## 📸 Screenshots
-
-Screenshots coming soon.
 
 ## 🖥️ Troubleshooting
 
@@ -124,6 +145,3 @@ Screenshots coming soon.
 
 Contributions are welcome! Feel free to open issues or submit pull requests to improve the interface or add new features.
 
-## 📄 License
-
-This project is open source.
